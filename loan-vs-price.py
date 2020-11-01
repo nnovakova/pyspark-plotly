@@ -18,9 +18,9 @@ def normalize(df: DataFrame, column: str) -> Series:
     return result[column]
 
 
-version = 'python3'
-os.environ['PYSPARK_PYTHON'] = version
-os.environ['PYSPARK_DRIVER_PYTHON'] = version
+# version = 'python3'
+# os.environ['PYSPARK_PYTHON'] = version
+# os.environ['PYSPARK_DRIVER_PYTHON'] = version
 
 spark = SparkSession.builder.appName('LoanVsPrices').getOrCreate()
 sc = spark.sparkContext
