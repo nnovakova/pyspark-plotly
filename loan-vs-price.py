@@ -1,22 +1,26 @@
-
+import os
 import pyspark
-import datetime
 import plotly.graph_objs as go
+
+from pandas.core.series import Series
 from datetime import datetime
 from plotly.offline import plot
-from pyspark.sql import SparkSession, SQLContext
+from pyspark.sql import SparkSession, SQLContext, DataFrame, Column
 from pyspark.sql.types import FloatType, DateType, StructType, StructField
 from pyspark.sql.functions import to_date, col, date_format
 
 
-def normalize(df, feature_name):
+def normalize(df: DataFrame, column: str) -> Series:
     result = df.copy()
-    max_value = df[feature_name].max()
-    min_value = df[feature_name].min()
-    result[feature_name] = (
-        df[feature_name] - min_value) / (max_value - min_value)
-    return result[feature_name]
+    max_value = df[column].max()
+    min_value = df[column].min()
+    result[column] = (df[column] - min_value) / (max_value - min_value)
+    return result[column]
 
+
+version = 'python3'
+os.environ['PYSPARK_PYTHON'] = version
+os.environ['PYSPARK_DRIVER_PYTHON'] = version
 
 spark = SparkSession.builder.appName('LoanVsPrices').getOrCreate()
 sc = spark.sparkContext
